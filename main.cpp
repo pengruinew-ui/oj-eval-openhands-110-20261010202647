@@ -95,7 +95,9 @@ public:
         return days;
     }
     int operator-(const Date& other) const {
-        long long diff = llabs(toOrdinal(*this) - toOrdinal(other));
+        long long a = toOrdinal(*this);
+        long long b = toOrdinal(other);
+        long long diff = (a > b) ? (a - b) : (b - a);
         return static_cast<int>(diff);
     }
     bool operator<(const Date& other) const {
