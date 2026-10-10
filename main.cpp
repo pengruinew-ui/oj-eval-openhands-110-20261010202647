@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <cstdlib>
 using namespace std;
 
 class Date {
@@ -82,23 +83,20 @@ public:
         return res;
     }
     // difference between dates (absolute days)
+    static long long toOrdinal(const Date& d) {
+        long long days = 0;
+        for (int y = 1900; y < d._year; ++y) {
+            days += isLeap(y) ? 366 : 365;
+        }
+        for (int m = 1; m < d._month; ++m) {
+            days += monthDays(d._year, m);
+        }
+        days += d._day - 1;
+        return days;
+    }
     int operator-(const Date& other) const {
-        // compute days since epoch for both
-        auto toOrdinal = [&](const Date& d) {
-            long long days = 0;
-            for (int y = 1900; y < d._year; ++y) {
-                days += isLeap(y) ? 366 : 365;
-            }
-            for (int m = 1; m < d._month; ++m) {
-                days += monthDays(d._year, m);
-            }
-            days += d._day - 1; // days offset from 1900-01-01
-            return days;
-        };
-        long long a = toOrdinal(*this);
-        long long b = toOrdinal(other);
-        long long diff = llabs(a - b);
-        return (int)diff;
+        long long diff = llabs(toOrdinal(*this) - toOrdinal(other));
+        return static_cast<int>(diff);
     }
     bool operator<(const Date& other) const {
         if (_year != other._year) return _year < other._year;
